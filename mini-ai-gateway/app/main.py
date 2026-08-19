@@ -1,8 +1,9 @@
 from uuid import uuid4
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 
 from app.config import settings
+from app.providers.errors import ProviderCreditExhaustedError
 from app.providers.factory import create_provider
 from app.schemas import GenerateRequest, GenerateResponse
 
@@ -30,7 +31,16 @@ async def health():
 async def generate(
     request: GenerateRequest,
 ) -> GenerateResponse:
-    output = await provider.generate(request.prompt)
+    try:
+        output = await provider.generate(request.prompt)
+    except ProviderCreditExhaustedError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail={
+                "code": "provider_credit_exhausted",
+                "message": str(exc),
+            },
+        ) from exc
 
     return GenerateResponse(
         request_id=str(uuid4()),

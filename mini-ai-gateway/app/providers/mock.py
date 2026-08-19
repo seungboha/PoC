@@ -7,4 +7,4 @@ class MockProvider:
 
     async def generate(self, prompt: str) -> str:
         await asyncio.sleep(0.5)
-        return f"[MOCK] {prompt}"
+        return f"[MOCK PROVIDER] Received: {prompt.upper()}"

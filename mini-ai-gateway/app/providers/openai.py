@@ -1,4 +1,6 @@
-from openai import AsyncOpenAI
+from openai import AsyncOpenAI, RateLimitError
+
+from app.providers.errors import ProviderCreditExhaustedError
 
 
 class OpenAIProvider:
@@ -9,9 +11,17 @@ class OpenAIProvider:
         self.client = AsyncOpenAI(api_key=api_key)
 
     async def generate(self, prompt: str) -> str:
-        response = await self.client.responses.create(
-            model=self.model,
-            input=prompt,
-        )
+        try:
+            response = await self.client.responses.create(
+                model=self.model,
+                input=prompt,
+            )
+        except RateLimitError as exc:
+            if exc.code == "credit_balance_exhausted":
+                raise ProviderCreditExhaustedError(
+                    "OpenAI provider has no available credit."
+                ) from exc
+
+            raise
 
         return response.output_text
