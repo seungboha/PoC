@@ -5,11 +5,7 @@
 /ostep-code/build/*
 !/ostep-code/build/.gitkeep
 
-# OSTEP CPU API executables
-/ostep-code/cpu-api/p1
-/ostep-code/cpu-api/p2
-/ostep-code/cpu-api/p3
-/ostep-code/cpu-api/p4
 
 # Keep cloned OSTEP source files local unless explicitly force-added
+/ostep-homework/*
 /ostep-code/*
