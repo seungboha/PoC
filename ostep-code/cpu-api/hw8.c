@@ -6,48 +6,65 @@
 #include <sys/wait.h>
 
 int main(int argc, char *argv[])
-{
-    printf("before fork");
-    // fflush(stdout);
+{   
+    int pipefd[2];
 
-    int rc = fork();
+    if (pipe(pipefd) == -1) {
+        perror("pipe");
+        exit(1);
+    }
 
-    if (rc < 0) {
+    int rc1 = fork();
+
+    if (rc1 < 0) {
         // fork failed; exit
         fprintf(stderr, "fork failed\n");
         exit(1);
-    } else if (rc == 0) {
-        // child (new process)
-        printf("Child - (pid:%d)\n", (int) getpid());
-        printf("Before closing standard output\n");
-        close(STDOUT_FILENO); // Close standard output
-      
-        int printf_result = printf("hello from child\n");
-        int flush_result = fflush(stdout);
-
-        fprintf(stderr, "printf returned: %d\n", printf_result);
-
-        if (flush_result == EOF) {
-            perror("fflush");
-        }
-
-
+    } else if (rc1 == 0) {
+        fprintf(stderr, "Child1 - (pid:%d)\n", (int) getpid());
+        dup2(pipefd[1], STDOUT_FILENO); // Redirect standard output to the write end of the pipe
+        fprintf(stdout, "Hello from child1\n");
+        fflush(stdout);
+        _exit(0);
 
     } else {
         // parent goes down this path (original process)
-        // int wait_status = wait(NULL);
-        int status;
-        int waited_pid = waitpid(rc, &status, 0);
-        if (waited_pid == -1) {
-            perror("waitpid");
-            exit(1);
-        }
-        if (WIFEXITED(status)) {
-            printf("Child exited with %d\n", WEXITSTATUS(status));
+        waitpid(rc1, NULL, 0);
+        close(pipefd[1]); // Close the write end of the pipe in the parent
+        fprintf(stderr, "Parent - (pid:%d)\n", (int) getpid());
+    }
+
+    int rc2 = fork();
+
+    if (rc2 < 0) 
+    {
+        // fork failed; exit
+        fprintf(stderr, "fork failed\n");
+        exit(1);
+    } 
+    else if (rc2 == 0) 
+    {
+        fprintf(stderr, "Child2 - (pid:%d)\n", (int) getpid());
+        dup2(pipefd[0], STDIN_FILENO);
+
+        close(pipefd[0]);
+
+        char buffer[100];
+        ssize_t bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer) - 1);
+
+        if (bytes_read > 0) {
+            buffer[bytes_read] = '\0';
+            fprintf(stderr, "Child2 received: %s", buffer);
         }
 
-        printf("Parent - (pid:%d)\n", (int) getpid());
+        _exit(0);
     }
+    else {
+        // parent goes down this path (original process)
+        waitpid(rc2, NULL, 0);
+        fprintf(stderr, "Parent - (pid:%d)\n", (int) getpid());
+    }
+
     return 0;
 }
 
