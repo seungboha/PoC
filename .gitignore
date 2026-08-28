@@ -2,11 +2,15 @@
 *.o
 
 # Central OSTEP build outputs
-/ostep-ostep/build/*
-!/ostep-ostep/build/.gitkeep
+/ostep-code/build/*
+!/ostep-code/build/.gitkeep
 
 # OSTEP CPU API executables
-/ostep-ostep/cpu-api/p1
-/ostep-ostep/cpu-api/p2
-/ostep-ostep/cpu-api/p3
-/ostep-ostep/cpu-api/p4
+/ostep-code/cpu-api/p1
+/ostep-code/cpu-api/p2
+/ostep-code/cpu-api/p3
+/ostep-code/cpu-api/p4
+
+# Keep cloned OSTEP trees local unless files are explicitly force-added
+/ostep-homework/*
+/ostep-code/*
