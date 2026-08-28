@@ -8,7 +8,7 @@ main(int argc, char *argv[])
 {
     int x = 100;
     printf("x : %d\n", x);
-    printf("hello world (pid:%d)\n", (int) getpid());
+    printf("Hello world (pid:%d)\n", (int) getpid());
     int rc = fork();
     printf("rc right after fork: %d\n", rc);
     if (rc < 0) {
@@ -17,6 +17,7 @@ main(int argc, char *argv[])
         exit(1);
     } else if (rc == 0) {
         // child (new process)
+        printf("\n");
         printf("==== hello, I am child (pid:%d) ====\n", (int) getpid());
         printf("rc: %d\n", rc);
         printf("child x : %d\n", x);
@@ -26,6 +27,7 @@ main(int argc, char *argv[])
         printf("child x : %d\n", x);
     } else {
         // parent goes down this path (original process)
+        printf("\n");
         printf("==== hello, I am parent (pid:%d) ====\n", (int) getpid());
         printf("rc: %d\n", rc);
         printf("parent x : %d\n", x);        
