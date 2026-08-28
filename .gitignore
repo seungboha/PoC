@@ -9,3 +9,4 @@
 # Keep cloned OSTEP source files local unless explicitly force-added
 /ostep-homework/*
 /ostep-code/*
+/ostep-projects/*
