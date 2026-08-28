@@ -11,6 +11,5 @@
 /ostep-code/cpu-api/p3
 /ostep-code/cpu-api/p4
 
-# Keep cloned OSTEP trees local unless files are explicitly force-added
-/ostep-homework/*
+# Keep cloned OSTEP source files local unless explicitly force-added
 /ostep-code/*
