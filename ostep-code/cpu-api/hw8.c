@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
         // parent goes down this path (original process)
         waitpid(rc1, NULL, 0);
         close(pipefd[1]); // Close the write end of the pipe in the parent
+        close(pipefd[0]);
         fprintf(stderr, "Parent - (pid:%d)\n", (int) getpid());
     }
 
@@ -47,7 +48,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Child2 - (pid:%d)\n", (int) getpid());
         dup2(pipefd[0], STDIN_FILENO);
 
-        close(pipefd[0]);
+        
 
         char buffer[100];
         ssize_t bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer) - 1);
