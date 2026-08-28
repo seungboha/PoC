@@ -1,6 +1,10 @@
 # C build artifacts
 *.o
 
+# Central OSTEP build outputs
+/ostep-ostep/build/*
+!/ostep-ostep/build/.gitkeep
+
 # OSTEP CPU API executables
 /ostep-ostep/cpu-api/p1
 /ostep-ostep/cpu-api/p2

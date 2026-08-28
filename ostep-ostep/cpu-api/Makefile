@@ -1,6 +1,6 @@
 CC := gcc
 CFLAGS := -Wall
-BUILD_DIR := build
+BUILD_DIR := ../build/cpu-api
 
 SOURCES := $(wildcard p*.c)
 PROGRAMS := $(patsubst %.c,%,$(SOURCES))

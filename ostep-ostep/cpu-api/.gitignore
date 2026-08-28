@@ -1,7 +1,3 @@
-# Compiled programs
-/build/*
-!/build/.gitkeep
-
 # Legacy in-place build outputs
 /p1
 /p2
