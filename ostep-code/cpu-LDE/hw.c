@@ -69,6 +69,6 @@ static void measure_system_call(void)
     uint64_t end = now_us();
     
     printf("Difference: %llu microseconds\n",
-           (unsigned long long)(end - start));
+           (unsigned long long)((end - start)/ITERATIONS));
     
 }
